@@ -1,7 +1,9 @@
+# Libs
 import tkinter as tk
 import csv
 import xml.etree.ElementTree as ET
 
+# Main
 class TodoItem:
     def __init__(self, title):
         self.title = title
@@ -18,7 +20,7 @@ class TodoListApp:
         self.translations = self.load_translations("translations.xml")  # Load Language file
         self.current_lang = "zh"  # 默认使用中文
 
-        self.title_label = tk.Label(self.window, text=self.get_translation("title_label"))
+        self.title_label = tk.Label(self.window, bitmap="hourglass", compound="left", text=self.get_translation("title_label"), font=("Consolas",18,"bold"))
         self.title_label.pack(fill=tk.X, padx=10, pady=10)
 
         self.todo_listbox = tk.Listbox(self.window)
