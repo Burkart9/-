@@ -1,0 +1,14 @@
+<translations>
+  <translation lang="en">
+    <text id="title_label">Todo List</text>
+    <text id="add_button">Add</text>
+    <text id="complete_button">Mark as Completed</text>
+    <text id="delete_button">Delete</text>
+  </translation>
+  <translation lang="zh">
+    <text id="title_label">待办事项列表</text>
+    <text id="add_button">添加</text>
+    <text id="complete_button">标记为已完成</text>
+    <text id="delete_button">删除</text>
+  </translation>
+</translations>
