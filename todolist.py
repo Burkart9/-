@@ -2,6 +2,13 @@
 import tkinter as tk
 import csv
 import xml.etree.ElementTree as ET
+import json
+
+# Vars
+Theme = {
+    "Light": {"fg": "black", "bg": "white"},
+    "Dark": {"fg": "white", "bg": "black"}
+}
 
 # Main
 class TodoItem:
@@ -46,7 +53,16 @@ class TodoListApp:
         self.language_menu.add_command(label="中文", command=lambda: self.change_language("zh"))
         self.language_menu.add_command(label="English", command=lambda: self.change_language("en"))
         self.menu_bar.add_cascade(label="Languages", menu=self.language_menu)
+
+        self.theme_menu = tk.Menu(self.menu_bar, tearoff=0)
+        self.theme_menu.add_command(label="Toggle Theme", command=self.change_theme)
+        self.menu_bar.add_cascade(label="Themes", menu=self.theme_menu)
+
         self.window.config(menu=self.menu_bar)
+
+        self.theme_file = "theme.json"
+        self.current_theme = self.load_theme()
+        self.apply_theme()
 
         self.load_items()
 
@@ -125,6 +141,41 @@ class TodoListApp:
         self.complete_button.config(text=self.get_translation("complete_button"))
         self.delete_button.config(text=self.get_translation("delete_button"))
         self.load_items()
+
+    def load_theme(self):
+        try:
+            with open(self.theme_file, "r") as file:
+                theme_data = json.load(file)
+                return theme_data.get("current_theme", "Light")
+        except FileNotFoundError:
+            return "Light"
+
+    def save_theme(self):
+        theme_data = {"current_theme": self.current_theme}
+        with open(self.theme_file, "w") as file:
+            json.dump(theme_data, file)
+
+    def apply_theme(self):
+        theme = Theme[self.current_theme]
+        self.window.config(bg=theme["bg"])
+        self.title_label.config(fg=theme["fg"], bg=theme["bg"])
+        self.todo_listbox.config(fg=theme["fg"], bg=theme["bg"])
+        self.add_frame.config(bg=theme["bg"])
+        self.add_entry.config(fg=theme["fg"], bg=theme["bg"])
+        self.add_button.config(fg=theme["fg"], bg=theme["bg"])
+        self.complete_button.config(fg=theme["fg"], bg=theme["bg"])
+        self.delete_button.config(fg=theme["fg"], bg=theme["bg"])
+        self.menu_bar.config(fg=theme["fg"], bg=theme["bg"])
+        self.language_menu.config(fg=theme["fg"], bg=theme["bg"])
+        self.theme_menu.config(fg=theme["fg"], bg=theme["bg"])
+
+    def change_theme(self):
+        if self.current_theme == "Light":
+            self.current_theme = "Dark"
+        else:
+            self.current_theme = "Light"
+        self.apply_theme()
+        self.save_theme()
 
     def run(self):
         self.window.mainloop()
